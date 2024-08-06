@@ -1,6 +1,8 @@
 import TodoItem from "./TodoItem";
 
 const KanbanColumn = ({title, items}) => {
+    console.log("items = ", items);
+
     return (
         <div>
             <h1>{title}</h1>
