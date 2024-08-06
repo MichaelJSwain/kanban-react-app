@@ -11,15 +11,12 @@ const AppContext = ({children}) => {
    const [isShowingModal, setIsShowingModal] = useState(false);
    const [modalView, setModalView] = useState(null); 
 
-   const login = async () => {
-        axios.post("http://localhost:4040/kanban/user/login", {
-            "username": "tim",
-            "password": "tim"
-        })
+   const login = async ({username, password}) => {
+        axios.post("http://localhost:4040/kanban/user/login", {username, password})
         .then(response => {
             console.log(response);
             if (response.data.success) {
-                
+                closeModal();
 
                 const fetchedUser = {
                     email: response.data.user.email,
@@ -55,15 +52,31 @@ const AppContext = ({children}) => {
     setUser(null);
    }
 
-   const register = async () => {
-    console.log("registering...");
+   const register = async ({email, username, password}) => {
+        console.log("registering...", email, username, password);
+        axios.post("http://localhost:4040/kanban/user/register", {email, username, password})
+            .then(response => {
+                if (response.data.success) {
+                    const {email, username, _id, todos} = response.data.user;
+                    setUser({
+                        email,
+                        username,
+                        _id,
+                        todos
+                    });
+                    closeModal();
+                }
+            })
+            .catch(e => {
+                console.log("error registering user", e);
+            })
    }
 
-   const createTodo = async () => {
+   const createTodo = async ({title, description, stage}) => {
         const newTodo = {
-            title: "Book AirBnBs",
-            description: "for Canada trip",
-            stage: "completed",
+            title,
+            description,
+            stage,
             _id: v4().toString()
         };
 
@@ -92,10 +105,11 @@ const AppContext = ({children}) => {
         axios.post(`http://localhost:4040/kanban/user/${user._id}/todos`, newTodo)
             .then(response => {
                 console.log("response = ", response);
+                closeModal();
             })
             .catch(e => {
                 console.log("error creating new to do ", e);
-            })
+            });
    }
 
    const handleModalTrigger = view => {
