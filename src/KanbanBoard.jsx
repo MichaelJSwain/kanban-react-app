@@ -1,40 +1,41 @@
 import { useEffect, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
+import axios from "axios";
 
 
 const KanbanBoard = () => {
     const [todos, setTodos] = useState({
-        todo: [
-            {
-                title: 'gym',
-                description: 'healthhhh',
-                stage: 'to do',
-                _id: '66b109d8ac82e327ae249fcb'
-              },
-              {
-                title: 'shopping',
-                description: 'boring!',
-                stage: 'to do',
-                _id: '66b109f4ac82e327ae249fd8'
-              }
-        ],
-        inProgress: [
-            {
-                title: 'running',
-                description: 'wow',
-                stage: 'in progress',
-                _id: '66b109e8ac82e327ae249fd1'
-              }
-        ],
-        completed: [
-            {
-                title: 'cleaning the house',
-                description: 'cleean',
-                stage: 'completed',
-                _id: '66b109c7ac82e327ae249fc6'
-              }
-        ]
+        todo: [],
+        inProgress: [],
+        completed: []
     });
+
+    useEffect(() => {
+        const fetchTodos = async () => {
+
+            await axios.get("http://localhost:4040/kanban/user/66b0c72cbc888c0273f772e9/todos")
+                .then(response => {
+                    if (response.data.success) {
+                        const newTodos = {...todos}
+                        response.data.todos.forEach(todo => {
+                            if (todo.stage === "to do") {
+                                newTodos.todo.push(todo);
+                            } else if (todo.stage === "in progress") {
+                                newTodos.inProgress.push(todo);
+                            } else if (todo.stage === "completed") {
+                                newTodos.completed.push(todo);
+                            }
+                        });
+                      
+                        setTodos(newTodos);
+                    }
+                })
+                .catch(e => {
+                    console.log("error fetching todos");
+                });
+        };
+        fetchTodos();
+    }, []);
 
     return (
         <div style={{display: "flex"}}>
