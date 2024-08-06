@@ -8,6 +8,8 @@ export const useGlobalContext = () => useContext(UserContext);
 
 const AppContext = ({children}) => {
    const [user, setUser] = useState(null);
+   const [isShowingModal, setIsShowingModal] = useState(false);
+   const [modalView, setModalView] = useState(null); 
 
    const login = async () => {
         axios.post("http://localhost:4040/kanban/user/login", {
@@ -53,6 +55,10 @@ const AppContext = ({children}) => {
     setUser(null);
    }
 
+   const register = async () => {
+    console.log("registering...");
+   }
+
    const createTodo = async () => {
         const newTodo = {
             title: "Book AirBnBs",
@@ -92,8 +98,13 @@ const AppContext = ({children}) => {
             })
    }
 
+   const handleModalTrigger = view => {
+        setIsShowingModal(true);
+        setModalView(view);
+   }
+
     return (
-        <UserContext.Provider value={{user, setUser, login, logout, createTodo}}>
+        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, isShowingModal, modalView, handleModalTrigger}}>
             {children}
         </UserContext.Provider>
     );

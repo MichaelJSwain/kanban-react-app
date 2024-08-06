@@ -1,6 +1,8 @@
 const TodoItem = ({item}) => {
     return (
-        <p>{item.title}</p>
+        <div>
+            <p>{item.title}</p>
+        </div>
     );
 };
 
