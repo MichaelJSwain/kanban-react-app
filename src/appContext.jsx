@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { v4 } from "uuid";
 
 const UserContext = createContext();
 
@@ -52,8 +53,47 @@ const AppContext = ({children}) => {
     setUser(null);
    }
 
+   const createTodo = async () => {
+        const newTodo = {
+            title: "Book AirBnBs",
+            description: "for Canada trip",
+            stage: "completed",
+            _id: v4().toString()
+        };
+
+        // update UI
+        if (user) {
+            setUser(currentUser => {
+                const updatedUser = {
+                    ...currentUser
+                };
+
+                let column;
+                if (newTodo.stage === "to do") {
+                    column = "todo";
+                } else if (newTodo.stage === "in progress") {
+                    column = "inProgress";
+                } else {
+                    column = "completed";
+                }
+
+                updatedUser.todos[column].push(newTodo);
+                return updatedUser;
+            });
+        }
+
+        // persist data
+        axios.post(`http://localhost:4040/kanban/user/${user._id}/todos`, newTodo)
+            .then(response => {
+                console.log("response = ", response);
+            })
+            .catch(e => {
+                console.log("error creating new to do ", e);
+            })
+   }
+
     return (
-        <UserContext.Provider value={{user, setUser, login, logout}}>
+        <UserContext.Provider value={{user, setUser, login, logout, createTodo}}>
             {children}
         </UserContext.Provider>
     );
