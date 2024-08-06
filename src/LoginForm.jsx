@@ -1,7 +1,14 @@
+import { useGlobalContext } from "./appContext";
+
 const LoginForm = () => {
+    const {closeModal} = useGlobalContext();
+
     return (
         <div>
-            <h1>Login Form</h1>
+            <div>
+                <h1>Login Form</h1>
+                <button onClick={closeModal}>X</button>
+            </div>
         </div>
     );
 };

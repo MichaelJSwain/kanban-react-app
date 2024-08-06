@@ -1,7 +1,10 @@
 const TodoForm = () => {
     return (
         <div>
-            <h1>Todo Form</h1>
+              <div>
+                <h1>Todo Form</h1>
+                <button onClick={closeModal}>X</button>
+            </div>
         </div>
     );
 };

@@ -103,8 +103,13 @@ const AppContext = ({children}) => {
         setModalView(view);
    }
 
+   const closeModal = () => {
+        setIsShowingModal(false);
+        setModalView(null);
+   }
+
     return (
-        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, isShowingModal, modalView, handleModalTrigger}}>
+        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, isShowingModal, modalView, closeModal, handleModalTrigger}}>
             {children}
         </UserContext.Provider>
     );
