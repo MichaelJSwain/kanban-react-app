@@ -112,6 +112,45 @@ const AppContext = ({children}) => {
             });
    }
 
+   const deleteTodo = async (todo) => {
+        console.log("attempting to delete to do...");
+        // update UI
+        /*
+            check current stage of todo
+            create a filtered copy of the stage array, filtering out the item with the same id as the todo passed into the func
+
+            copy the current user obj
+            overwrite the target stage array with the filtered array
+            call set state method
+        */
+
+        console.log("todo = ", todo);
+        let currentStage;
+
+        if (todo.stage === "to do") {
+            currentStage = "todo";
+        } else if (todo.stage === "in progress") {
+            currentStage = "inProgress";
+        } else {
+            currentStage = "completed";
+        }
+        console.log(user.todos[currentStage])
+        
+        const filtered = user.todos[currentStage].filter(item => {
+            return item._id !== todo._id;
+        });
+        
+        const updatedUser = {
+            ...user
+        };
+        updatedUser.todos[currentStage] = filtered;
+
+        console.log("updated user context = ", updatedUser);
+        setUser(updatedUser);
+
+        // persist changes
+   }
+ 
    const handleModalTrigger = view => {
         setIsShowingModal(true);
         setModalView(view);
@@ -123,7 +162,7 @@ const AppContext = ({children}) => {
    }
 
     return (
-        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, isShowingModal, modalView, closeModal, handleModalTrigger}}>
+        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, deleteTodo, isShowingModal, modalView, closeModal, handleModalTrigger}}>
             {children}
         </UserContext.Provider>
     );
