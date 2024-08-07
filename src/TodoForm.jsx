@@ -30,15 +30,15 @@ const TodoForm = () => {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="title">Title:</label>
-                    <input type="text" name="title" value={formData.title} onChange={handleChange}/>
+                    <input type="text" name="title" id="title" autoComplete="true" value={formData.title} onChange={handleChange}/>
                 </div>
                 <div>
                     <label htmlFor="description">Description:</label>
-                    <input type="text" name="description" value={formData.description} onChange={handleChange}/>
+                    <input type="text" name="description" id="description" autoComplete="true" value={formData.description} onChange={handleChange}/>
                 </div>
                 <div>
                     <label htmlFor="stage">Stage:</label>
-                    <input type="password" name="stage" value={formData.stage} onChange={handleChange}/>
+                    <input type="password" name="stage" id="stage" autoComplete="true" value={formData.stage} onChange={handleChange}/>
                 </div>
                 <button>Submit</button>
             </form>
