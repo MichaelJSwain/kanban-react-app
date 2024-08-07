@@ -10,12 +10,30 @@
     position: absolute;
     top: 50px;
     left: 25%;
-    width: 500px;
-    height: 500px;
     background: white;
     border-radius: 20px;
+    padding: 20px 50px;
 }
 
 .modal-inner h1 {
     color: black;
+    margin-right: 20px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+}
+
+.form-section-container {
+    display: flex;
+    flex-direction: column; 
+    color: black;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-section-container input {
+    border-radius: 5px;
+    padding: 10px;
 }
