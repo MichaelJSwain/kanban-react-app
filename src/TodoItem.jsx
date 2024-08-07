@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useGlobalContext } from "./appContext";
+import UpdateForm from "./UpdateForm";
 
 const TodoItem = ({item}) => {
-    const {deleteTodo} = useGlobalContext();
+    const {deleteTodo, handleModalTrigger} = useGlobalContext();
     const [isShowingDropdown, setIsShowingDropdown] = useState(0);
 
     const handleDropdownBtnInteraction = () => {
@@ -26,7 +27,7 @@ const TodoItem = ({item}) => {
                 <button >edit</button>
                 <div style={{position: "absolute", opacity: isShowingDropdown, background: "white", borderRadius: "5px"}}>
                     <ul style={{listStyle: "none", textAlign: "left", padding: "0 20px", color: "black", height: "100px"}}>
-                        <li style={{padding: "0 0 10px"}} onClick={handleUpdate}>edit</li>
+                        <li style={{padding: "0 0 10px"}} onClick={() => {handleModalTrigger(<UpdateForm id={item._id} title={item.title} description={item.description} stage={item.stage} />)}}>edit</li>
                         <li style={{padding: "0 0 10px"}} onClick={() => deleteTodo(item)}>delete</li>
                     </ul>
                 </div>

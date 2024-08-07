@@ -149,6 +149,21 @@ const AppContext = ({children}) => {
         setUser(updatedUser);
 
         // persist changes
+        
+        axios.delete(`http://localhost:4040/kanban/user/${user._id}/todos/${todo._id}`)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+   }
+
+   const updateTodo = async (todo) => {
+        // update UI
+        console.log(todo);
+
+        // persist changes
    }
  
    const handleModalTrigger = view => {
@@ -162,7 +177,7 @@ const AppContext = ({children}) => {
    }
 
     return (
-        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, deleteTodo, isShowingModal, modalView, closeModal, handleModalTrigger}}>
+        <UserContext.Provider value={{user, setUser, login, logout, register, createTodo, deleteTodo, updateTodo, isShowingModal, modalView, closeModal, handleModalTrigger}}>
             {children}
         </UserContext.Provider>
     );
