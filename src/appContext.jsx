@@ -159,11 +159,110 @@ const AppContext = ({children}) => {
         })
    }
 
-   const updateTodo = async (todo) => {
+   const updateTodo = async (todo, stage) => {
         // update UI
-        console.log(todo);
+
+        if (stage === todo.stage) {
+            console.log("stage has not changed");
+            if (stage === "to do") {
+                stage = "todo";
+           } else if (stage === "in progress") {
+                stage = "inProgress";
+           }
+
+            const updatedTodoColumn = user.todos[stage].map(item => {
+                console.log("item id = ", item._id);
+                console.log("todo id = ", todo._id);
+                if (item._id === todo._id) {
+                    console.log("matching ids");
+                    return todo;
+                } else {
+                    return item;
+                }
+            });
+            
+            const updatedTodos = {...user.todos};
+            updatedTodos[stage] = updatedTodoColumn;
+
+            setUser({
+                ...user,
+                todos: updatedTodos
+            });
+        } else {
+            console.log("stage has changed");
+            if (stage === "to do") {
+                stage = "todo";
+           } else if (stage === "in progress") {
+                stage = "inProgress";
+           }
+
+           let todoStage;
+           if (todo.stage === "to do") {
+                todoStage = "todo";
+           } else if (todo.stage === "in progress") {
+                todoStage = "inProgress";
+           } else {
+                todoStage = "completed";
+           }
+
+            const updatedTodos = {...user.todos};
+            updatedTodos[stage] = updatedTodos[stage].filter(item => {
+                return item._id !== todo._id;
+            });
+
+            updatedTodos[todoStage].push(todo);
+
+            setUser({
+                ...user,
+                todos: updatedTodos
+            });
+
+        //     if (stage === "to do") {
+        //         stage = "todo";
+        //    } else if (stage === "in progress") {
+        //         stage = "inProgress";
+        //    }
+            
+        //     const updatedTodos = {...user.todos};
+        //     updatedTodos[stage] = updatedTodos[stage].filter(item => {
+        //         return item._id !== todo._id;
+        //     });
+
+        //     updatedTodos[todo.stage].push(todo);
+
+        //     console.log(updatedTodos);
+        }
+        
+        /*
+            if stage hasn't changed
+                map over the todos in the target kanban column
+                    if target todo
+                        return todo passed to update func
+                    else
+                        return todo
+
+            else 
+                delete the current to do in the target column array
+                append the updated todo to the new target column array
+        */
+
+
+       /*
+
+       */
+
+
+        // console.log("updatedTodos = ", updatedTodos);
+        
 
         // persist changes
+        axios.put(`http://localhost:4040/kanban/user/${user._id}/todos/${todo._id}`, todo)
+            .then(response => {
+                console.log(response);
+            })
+            .catch(e => {
+                console.log("error persisting todo updates ", e);
+            });
    }
  
    const handleModalTrigger = view => {

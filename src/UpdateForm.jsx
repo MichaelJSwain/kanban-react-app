@@ -8,14 +8,16 @@ const UpdateForm = ({id, title, description, stage}) => {
         stage
     });
     const {closeModal, updateTodo} = useGlobalContext();
-    
+
     const handleSubmit = e => {
         e.preventDefault();
+    
         const updatedTodo = {
             ...formData,
-            id
+            _id: id
         };
-        updateTodo(updatedTodo);
+        console.log("submitting: ", updatedTodo)
+        updateTodo(updatedTodo, stage);
     }
 
     const handleChange = e => {
