@@ -6,15 +6,19 @@ import KanbanBoard from './KanbanBoard'
 import Navbar from './Navbar'
 import { useGlobalContext } from './appContext'
 import Modal from './Modal'
+import WelcomeScreen from './WelcomeScreen'
 
 function App() {
   const [count, setCount] = useState(0)
-  const {isShowingModal, modalView} = useGlobalContext();
+  const {user, isShowingModal, modalView} = useGlobalContext();
 
   return (
     <>
       <Navbar />
-      <KanbanBoard/>
+      { user ?
+        <KanbanBoard/> : <WelcomeScreen />
+      }
+      
       {isShowingModal && <Modal>{modalView}</Modal>}
     </>
   )

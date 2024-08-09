@@ -37,7 +37,7 @@ const KanbanBoard = () => {
     // }, []);
 
     return (
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", justifyContent: "space-around"}}>
             <KanbanColumn title="To do" items={user?.todos?.todo || []}/>
             <KanbanColumn title="In progress" items={user?.todos?.inProgress || []}/>
             <KanbanColumn title="Completed" items={user?.todos?.completed || []}/>
