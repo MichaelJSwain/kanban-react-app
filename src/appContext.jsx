@@ -217,6 +217,7 @@ const AppContext = ({children}) => {
                 todos: updatedTodos
             });
 
+            closeModal();
         //     if (stage === "to do") {
         //         stage = "todo";
         //    } else if (stage === "in progress") {
