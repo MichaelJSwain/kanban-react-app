@@ -6,6 +6,16 @@ const UserContext = createContext();
 
 export const useGlobalContext = () => useContext(UserContext);
 
+const getColumnKey = stage => {
+    if (stage === "to do") {
+        return "todo";
+    } else if (stage === "in progress") {
+        return "inProgress";
+    } else if (stage === "completed") {
+        return "completed";
+    } 
+}
+
 const AppContext = ({children}) => {
    const [user, setUser] = useState(null);
    const [isShowingModal, setIsShowingModal] = useState(false);
@@ -87,16 +97,9 @@ const AppContext = ({children}) => {
                     ...currentUser
                 };
 
-                let column;
-                if (newTodo.stage === "to do") {
-                    column = "todo";
-                } else if (newTodo.stage === "in progress") {
-                    column = "inProgress";
-                } else {
-                    column = "completed";
-                }
+                const columnKey = getColumnKey(newTodo.stage);
 
-                updatedUser.todos[column].push(newTodo);
+                updatedUser.todos[columnKey].push(newTodo);
                 return updatedUser;
             });
         }
@@ -113,43 +116,21 @@ const AppContext = ({children}) => {
    }
 
    const deleteTodo = async (todo) => {
-        console.log("attempting to delete to do...");
-        // update UI
-        /*
-            check current stage of todo
-            create a filtered copy of the stage array, filtering out the item with the same id as the todo passed into the func
-
-            copy the current user obj
-            overwrite the target stage array with the filtered array
-            call set state method
-        */
-
-        console.log("todo = ", todo);
-        let currentStage;
-
-        if (todo.stage === "to do") {
-            currentStage = "todo";
-        } else if (todo.stage === "in progress") {
-            currentStage = "inProgress";
-        } else {
-            currentStage = "completed";
-        }
-        console.log(user.todos[currentStage])
+        // UI update
+        const columnKey = getColumnKey(todo.stage);
         
-        const filtered = user.todos[currentStage].filter(item => {
+        const filtered = user.todos[columnKey].filter(item => {
             return item._id !== todo._id;
         });
         
         const updatedUser = {
             ...user
         };
-        updatedUser.todos[currentStage] = filtered;
+        updatedUser.todos[columnKey] = filtered;
 
-        console.log("updated user context = ", updatedUser);
         setUser(updatedUser);
 
         // persist changes
-        
         axios.delete(`http://localhost:4040/kanban/user/${user._id}/todos/${todo._id}`)
         .then(response => {
             console.log(response);
@@ -160,21 +141,12 @@ const AppContext = ({children}) => {
    }
 
    const updateTodo = async (todo, stage) => {
-        // update UI
+        // UI update
+        const columnKey = getColumnKey(stage);
 
         if (stage === todo.stage) {
-            console.log("stage has not changed");
-            if (stage === "to do") {
-                stage = "todo";
-           } else if (stage === "in progress") {
-                stage = "inProgress";
-           }
-
-            const updatedTodoColumn = user.todos[stage].map(item => {
-                console.log("item id = ", item._id);
-                console.log("todo id = ", todo._id);
+            const updatedTodoColumn = user.todos[columnKey].map(item => {
                 if (item._id === todo._id) {
-                    console.log("matching ids");
                     return todo;
                 } else {
                     return item;
@@ -182,79 +154,29 @@ const AppContext = ({children}) => {
             });
             
             const updatedTodos = {...user.todos};
-            updatedTodos[stage] = updatedTodoColumn;
+            updatedTodos[columnKey] = updatedTodoColumn;
 
             setUser({
                 ...user,
                 todos: updatedTodos
             });
         } else {
-            console.log("stage has changed");
-            if (stage === "to do") {
-                stage = "todo";
-           } else if (stage === "in progress") {
-                stage = "inProgress";
-           }
-
-           let todoStage;
-           if (todo.stage === "to do") {
-                todoStage = "todo";
-           } else if (todo.stage === "in progress") {
-                todoStage = "inProgress";
-           } else {
-                todoStage = "completed";
-           }
+           const newColumnKey = getColumnKey(todo.stage);
 
             const updatedTodos = {...user.todos};
-            updatedTodos[stage] = updatedTodos[stage].filter(item => {
+            updatedTodos[columnKey] = updatedTodos[columnKey].filter(item => {
                 return item._id !== todo._id;
             });
 
-            updatedTodos[todoStage].push(todo);
+            updatedTodos[newColumnKey].push(todo);
 
             setUser({
                 ...user,
                 todos: updatedTodos
             });
-
-            closeModal();
-        //     if (stage === "to do") {
-        //         stage = "todo";
-        //    } else if (stage === "in progress") {
-        //         stage = "inProgress";
-        //    }
-            
-        //     const updatedTodos = {...user.todos};
-        //     updatedTodos[stage] = updatedTodos[stage].filter(item => {
-        //         return item._id !== todo._id;
-        //     });
-
-        //     updatedTodos[todo.stage].push(todo);
-
-        //     console.log(updatedTodos);
         }
-        
-        /*
-            if stage hasn't changed
-                map over the todos in the target kanban column
-                    if target todo
-                        return todo passed to update func
-                    else
-                        return todo
 
-            else 
-                delete the current to do in the target column array
-                append the updated todo to the new target column array
-        */
-
-
-       /*
-
-       */
-
-
-        // console.log("updatedTodos = ", updatedTodos);
-        
+        closeModal();
 
         // persist changes
         axios.put(`http://localhost:4040/kanban/user/${user._id}/todos/${todo._id}`, todo)
