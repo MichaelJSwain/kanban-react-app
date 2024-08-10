@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGlobalContext } from "./appContext";
+import { useGlobalContext } from "../appContext";
 
 const UpdateForm = ({id, title, description, stage}) => {
     const [formData, setFormData] = useState({

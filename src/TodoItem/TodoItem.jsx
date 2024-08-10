@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useGlobalContext } from "./appContext";
-import UpdateForm from "./UpdateForm";
+import { useGlobalContext } from "../appContext";
+import UpdateForm from "../forms/UpdateForm";
+import "./TodoItem.css";
 
 const TodoItem = ({item}) => {
     const {deleteTodo, handleModalTrigger} = useGlobalContext();
@@ -21,7 +22,7 @@ const TodoItem = ({item}) => {
     };
 
     return (
-        <div style={{display: "flex", justifyContent: "space-around", background: "gray", padding: "10px", borderRadius: "10px"}}>
+        <div className="todo-item">
             <span>{item.title}</span>
             <div onMouseEnter={handleDropdownBtnInteraction} onMouseLeave={handleDropdownBtnInteraction}>
                 <button >edit</button>

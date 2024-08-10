@@ -1,6 +1,6 @@
 import { useGlobalContext } from "./appContext";
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
+import LoginForm from "./forms/LoginForm";
+import RegisterForm from "./forms/RegisterForm";
 
 const WelcomeScreen = () => {
     const {handleModalTrigger} = useGlobalContext();

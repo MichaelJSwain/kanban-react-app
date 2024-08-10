@@ -3,10 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import KanbanBoard from './KanbanBoard'
-import Navbar from './Navbar'
+import Navbar from './navbar/Navbar'
 import { useGlobalContext } from './appContext'
-import Modal from './Modal'
 import WelcomeScreen from './WelcomeScreen'
+import Modal from './modal/Modal'
 
 function App() {
   const [count, setCount] = useState(0)

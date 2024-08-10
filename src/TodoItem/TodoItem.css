@@ -1,0 +1,7 @@
+.todo-item {
+    display: flex;
+    justify-content: space-around;
+    background: gray;
+    padding: 10px;
+    border-radius: 10px;
+}
